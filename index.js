@@ -14,14 +14,31 @@ class SpinnyImage extends HTMLElement {
                     display: inline-block;
                 }
             </style>
-            <p>test prefilled content</p>
+            <slot name="default-test">test prefilled content</slot>
             <slot></slot>
         `;
     }
 
+    /**
+     * right now it's kinda unclear for me where to append the template ...
+     * there are at least 2 ways to do it. just wondering which is better
+     */
     connectedCallback() {
         this.shadowRoot.appendChild(this.template.content.cloneNode(true));
+        console.log(this);
+        const slots = Array.from(this.shadowRoot.querySelectorAll('slot'));
 
+        slots.forEach((slot) => slot.addEventListener('click', () => {
+            const nodes = slot.assignedNodes();
+            console.log("NODES:", nodes);
+            console.log("NODES:", nodes[0].innerHTML);
+            console.log(`clicked slot: ${slot}`, slot);
+        }));
+
+        console.log(this.shadowRoot.childElementCount);
+        console.log(this.shadowRoot.childNodes);
+
+        console.log(this.shadowRoot.querySelector('img'));
         this.animate([
             {transform: 'scale(0) rotate(0deg)'},
             {transform: 'scale(1) rotate(1080deg)'},
