@@ -1,3 +1,5 @@
+// to import/require stuff needs webpack (bundlers)
+
 class ImageCarouselContainer extends HTMLElement {
     constructor() {
         super();
@@ -130,7 +132,9 @@ class ImageCarouselContainer extends HTMLElement {
 
     // handle index ...
 }
-
+// console.log(IndexHelper);
+// Object.assign(ImageCarouselContainer.prototype, IndexHelper);
+console.log(ImageCarouselContainer);
 customElements.define('image-carousel-container', ImageCarouselContainer);
 
 // TODO:
