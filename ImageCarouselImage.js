@@ -1,3 +1,21 @@
+const handler = {
+    get: function(obj, prop) {
+        if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+            return new Proxy(obj[prop], handler);
+        }
+        return obj[prop];
+    },
+    set: function(obj, prop, value) {
+        if (prop === 'active') {
+            if (value == true) {
+                this.proxy.sourceImage();
+            }
+        }
+        obj[prop] = value;
+        return true;
+    }
+}
+
 class ImageCarouselImage extends HTMLElement {
     constructor() {
         super();
@@ -9,16 +27,7 @@ class ImageCarouselImage extends HTMLElement {
         /**
          * i dont even think i need proxies but it's fun
          */
-        this.proxy = new Proxy(this, {
-            get: function(obj, prop) {
-                return obj[prop];
-            },
-            set: function(obj, prop, value) {
-                obj[prop] = value;
-                console.log(`${prop}`, value);
-                return true;
-            }
-        })
+        this.proxy = new Proxy(this, handler)
     }
 
     
@@ -43,7 +52,7 @@ class ImageCarouselImage extends HTMLElement {
         this.init();
         this.populateDataSrc();
         
-        this.sourceImage();
+        // this.sourceImage();
         this.addCustomEventListener();
     }
 
@@ -64,6 +73,8 @@ class ImageCarouselImage extends HTMLElement {
     }
 
     sourceImage() {
+        // nested object is not detected
+        // this.proxy.test = 'test';
         this.proxy.image.src = this.imageSrc;
     }
 
