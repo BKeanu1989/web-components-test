@@ -5,7 +5,9 @@ class ImageCarouselImage extends HTMLElement {
         this.imageSrc;
         this.addCustomEventListener();
     }
+
     
+    // implement proxies for this.image & and so on
     connectedCallback() {
         const template = document.createElement('template');
         template.innerHTML = `
@@ -13,8 +15,9 @@ class ImageCarouselImage extends HTMLElement {
                 :host {
                     display: inline-block;
                 }
-                img {
-                    border: 5px solid yellow;
+
+                :host([active="true"]) {
+                    border: 1px solid green;
                 }
 
             </style>
@@ -24,7 +27,7 @@ class ImageCarouselImage extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         this.init();
         this.populateDataSrc();
-        this.sourceImage();
+        // this.sourceImage();
     }
 
     init() {
@@ -46,9 +49,11 @@ class ImageCarouselImage extends HTMLElement {
         this.image.src = this.imageSrc;
     }
 
+    testMessage() {
+        console.log("test message via custom component");
+    }
+
     addCustomEventListener() {
-        console.log(this.parentNode);
-        console.log(this.parentNode.hasAttribute('lazyload'));
         document.addEventListener('foo', () => {
             console.log("i dont think this will work");
         })
