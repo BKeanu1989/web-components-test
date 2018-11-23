@@ -31,14 +31,16 @@ class ImageCarouselContainer extends HTMLElement {
                 .indicators {
                     position: absolute;
                     left: 50%;
-                    bottom: 10%;
+                    bottom: 5%;
+                    transform: translate(-50%);
                 }
 
                 .indicators li {
                     min-width: 10px;
                     min-height: 10px;
-                    display: inline;
+                    display: inline-block;
                     background-color: green;
+                    margin-left: 5px;
                 }
 
             </style>
@@ -81,8 +83,6 @@ class ImageCarouselContainer extends HTMLElement {
         for (let index = 0; index < this.numIndicators; index++) {
             let li = document.createElement('li');
             list.appendChild(li);
-            console.log(list);
-            
         }
         this.addCustomEventListener();
 
@@ -114,8 +114,11 @@ class ImageCarouselContainer extends HTMLElement {
             // console.log(event);
             switch(event.detail.action) {
                 case 'prev':
+                    console.log("prev clicked");
                     this.images[this.activeIndex].removeAttribute('active');
                     this.images[1].setAttribute('active', true);
+                    // this.images.proxy[1].setAttribute('active', true);
+                    this.images[1].sourceImage();
                     break;
                 case 'next': 
                     this.images[this.activeIndex].removeAttribute('active');
