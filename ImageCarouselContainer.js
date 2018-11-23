@@ -4,7 +4,7 @@ class ImageCarouselContainer extends HTMLElement {
         this.attachShadow({
             mode: 'open'
         })
-        this.active;
+        this.activeIndex;
 
         this.template = document.createElement('template');
         this.template.innerHTML = `
@@ -67,11 +67,27 @@ class ImageCarouselContainer extends HTMLElement {
     addCustomEventListener() {
         let leftHander = this.shadowRoot.querySelector('slot[name="left-handler"]');
         leftHander.addEventListener('click', () => {
-            console.log("left handler clicked");
+            const prevImageEvent = new CustomEvent('changeImage', {
+                detail: {
+                    action: 'prev'
+                },
+                bubbles: true
+            });
+            this.dispatchEvent(prevImageEvent);
         })
         let rightHandler = this.shadowRoot.querySelector('slot[name="right-handler"]');
         rightHandler.addEventListener('click', () => {
-            console.log("right handler clicked");
+            const nextImageEvent = new CustomEvent('changeImage', {
+                detail: {
+                    action: 'next'
+                },
+                bubbles: true
+            });
+            this.dispatchEvent(nextImageEvent);
+        })
+        this.addEventListener('changeImage', (event) => {
+            console.log("change image called");
+            console.log(event);
         })
     }
 }
