@@ -3,7 +3,22 @@ class ImageCarouselImage extends HTMLElement {
         super();
         this.image;
         this.imageSrc;
-        this.addCustomEventListener();
+        let that = this;
+        
+
+        /**
+         * i dont even think i need proxies but it's fun
+         */
+        this.proxy = new Proxy(this, {
+            get: function(obj, prop) {
+                return obj[prop];
+            },
+            set: function(obj, prop, value) {
+                obj[prop] = value;
+                console.log(`${prop}`, value);
+                return true;
+            }
+        })
     }
 
     
@@ -27,33 +42,44 @@ class ImageCarouselImage extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         this.init();
         this.populateDataSrc();
-        // this.sourceImage();
+        
+        this.sourceImage();
+        this.addCustomEventListener();
     }
 
     init() {
-        this.lazyload = this.parentNode.getAttribute('lazyload');
-        this.image = this.shadowRoot.querySelector('img');
-        this.imageSrc = this.getAttribute('src');
-        if (this.lazyload) {
-            this.image.dataset.src = this.imageSrc;
+        this.proxy.lazyload = this.parentNode.getAttribute('lazyload');
+        this.proxy.image = this.shadowRoot.querySelector('img');
+        this.proxy.imageSrc = this.getAttribute('src');
+        this.proxy.active = this.getAttribute('active');
+        if (this.proxy.lazyload) {
+            this.proxy.image.dataset.src = this.imageSrc;
         } else {
-            this.image.src = this.imageSrc;
+            this.proxy.image.src = this.imageSrc;
         }
     }
     
     populateDataSrc() {
-        this.image.dataset.src = this.imageSrc;
+        this.proxy.image.dataset.src = this.imageSrc;
     }
 
     sourceImage() {
-        this.image.src = this.imageSrc;
+        this.proxy.image.src = this.imageSrc;
     }
 
     testMessage() {
+        // this is working in the browser
+        // let image = document.querySelector('carousel-image');
+        // image.testMessage();
         console.log("test message via custom component");
     }
 
     addCustomEventListener() {
+        // not working
+        // this.addEventListener('change', () => {
+        //     console.log(this);
+        //     console.log("something changed");
+        // })
         document.addEventListener('foo', () => {
             console.log("i dont think this will work");
         })
