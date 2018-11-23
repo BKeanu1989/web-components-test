@@ -7,12 +7,16 @@
 </head>
 <body>
     <spinny-image>
+        <p slot="default-test">test</p>
+        <img src="test.jpeg" alt="test for web component">
+        <img src="test.jpeg" alt="test for web component">
+        <img src="test.jpeg" alt="test for web component">
         <img src="test.jpeg" alt="test for web component">
     </spinny-image>
     <script src="index.js"></script>
     <script>
         document.addEventListener('foo', (event) => {
-            console.log("received foo", event);
+            console.log("received foo");
         })
     </script>
 </body>
