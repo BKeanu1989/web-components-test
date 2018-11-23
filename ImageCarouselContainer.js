@@ -10,11 +10,25 @@ class ImageCarouselContainer extends HTMLElement {
         this.template.innerHTML = `
             <style>
                 :host {
-                    display: inline-block;
+                    display: block;
+                    position: relative;
+                    width: 100%;
                 }
+
+                .left-chev {
+                    position: absolute;
+                    left: 0;
+
+                }
+
+                .right-chev {
+                    position: absolute;
+                    right: 0;
+                }
+
             </style>
-            <slot name="left-handler">left-chevron</slot>
-            <slot name="right-handler">right chevron</slot>
+            <slot name="left-handler"><span class="left-chev">left-chevron</span></slot>
+            <slot name="right-handler"> <span class="right-chev">right chevron</span></slot>
             <slot name="indicator"></slot>
             <slot></slot>
         `;
@@ -34,12 +48,10 @@ class ImageCarouselContainer extends HTMLElement {
             if (!slot.name) {
                 let images = Array.from(slot.assignedNodes().filter((x) => x.nodeName === 'IMG'));
                 images = images.map((image) => {
-                    console.log(image);
                     image.dataset.src = image.src;
                     image.src = '';
                     return image;
                 });
-                console.log(images);
             }
         });
     }
