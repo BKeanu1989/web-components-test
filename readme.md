@@ -7,6 +7,6 @@ I am using this web component for using image sliders in a simple manner.
 - [x] Lazy loading capability
 - [x] Controls
 - [ ] Slide images
-- [] Lazy Loading via dataset
-- [] Lazy Loading via Intersection Observer
+- [ ] Lazy Loading via dataset
+- [ ] Lazy Loading via Intersection Observer
 
