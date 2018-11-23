@@ -4,7 +4,7 @@ class ImageCarouselContainer extends HTMLElement {
         this.attachShadow({
             mode: 'open'
         })
-        this.addCustomEventListener();
+        this.active;
 
         this.template = document.createElement('template');
         this.template.innerHTML = `
@@ -46,26 +46,32 @@ class ImageCarouselContainer extends HTMLElement {
         slots.forEach((slot) => {
             // default slot ergo should be used for slide images
             if (!slot.name) {
-                let images = Array.from(slot.assignedNodes().filter((x) => x.nodeName === 'IMG'));
-                images = images.map((image) => {
+                let images =  Array.from(slot.assignedNodes().filter((x) => x.nodeName === 'CAROUSEL-IMAGE'));
+                images = images.map((image, index) => {
+                    if (index === 0) image.setAttribute('active', true);
+                    image.dataset.number = index + 1;
                     image.dataset.src = image.src;
                     image.src = '';
                     return image;
                 });
+                
+                console.log("IMAGES: ", images);
+                // images[0].shadowRoot.testMessage();
+                console.log(images[0].hasAttribute('active'));
             }
         });
+        this.addCustomEventListener();
+
     }
 
     addCustomEventListener() {
-        this.shadowRoot.addEventListener("click", () => {
-            const event = new CustomEvent('foo', {
-                detail: {
-                    bar: 'BAR',
-                    baz: 'BAZ'
-                },
-                bubbles: true
-            })
-            this.dispatchEvent(event);
+        let leftHander = this.shadowRoot.querySelector('slot[name="left-handler"]');
+        leftHander.addEventListener('click', () => {
+            console.log("left handler clicked");
+        })
+        let rightHandler = this.shadowRoot.querySelector('slot[name="right-handler"]');
+        rightHandler.addEventListener('click', () => {
+            console.log("right handler clicked");
         })
     }
 }
