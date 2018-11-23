@@ -4,16 +4,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Web Components</title>
+    <style>
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-    <image-carousel-container>
-        <carousel-image src="test.jpeg"></carousel-image>
-    </image-carousel-container>
+    <div class="container">
+        <image-carousel-container lazyload=true >
+            <carousel-image src="test.jpeg"></carousel-image>
+        </image-carousel-container>
+    </div>
     <script src="ImageCarouselContainer.js"></script>
     <script src="ImageCarouselImage.js"></script>
     <script>
         document.addEventListener('foo', (event) => {
-            console.log("received foo");
+            // console.log("received foo");
         })
     </script>
 </body>
