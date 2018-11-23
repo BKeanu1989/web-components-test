@@ -5,6 +5,8 @@ class ImageCarouselContainer extends HTMLElement {
             mode: 'open'
         })
         this.activeIndex;
+        this.images;
+        this.numIndicators;
 
         this.template = document.createElement('template');
         this.template.innerHTML = `
@@ -26,10 +28,23 @@ class ImageCarouselContainer extends HTMLElement {
                     right: 0;
                 }
 
+                .indicators {
+                    position: absolute;
+                    left: 50%;
+                    bottom: 10%;
+                }
+
+                .indicators li {
+                    min-width: 10px;
+                    min-height: 10px;
+                    display: inline;
+                    background-color: green;
+                }
+
             </style>
             <slot name="left-handler"><span class="left-chev">left-chevron</span></slot>
             <slot name="right-handler"> <span class="right-chev">right chevron</span></slot>
-            <slot name="indicator"></slot>
+            <ul class="indicators"></ul>
             <slot></slot>
         `;
     }
@@ -42,24 +57,33 @@ class ImageCarouselContainer extends HTMLElement {
         // const nodes = slot.assignedNodes();
         this.shadowRoot.appendChild(this.template.content.cloneNode(true));
         const slots = Array.from(this.shadowRoot.querySelectorAll('slot'));
-
+        const list = this.shadowRoot.querySelector('ul');
         slots.forEach((slot) => {
             // default slot ergo should be used for slide images
             if (!slot.name) {
                 let images =  Array.from(slot.assignedNodes().filter((x) => x.nodeName === 'CAROUSEL-IMAGE'));
-                images = images.map((image, index) => {
-                    if (index === 0) image.setAttribute('active', true);
+                let activeImageGiven = images.some((x) => x.hasAttribute('active'));
+                this.numIndicators = images.length;
+                this.images = images.map((image, index) => {
+
+                    if (index === 0 && !activeImageGiven) {
+                        image.setAttribute('active', true);
+                        this.activeIndex = 0;
+                    } 
+
                     image.dataset.number = index + 1;
                     image.dataset.src = image.src;
                     image.src = '';
                     return image;
                 });
-                
-                console.log("IMAGES: ", images);
-                // images[0].shadowRoot.testMessage();
-                console.log(images[0].hasAttribute('active'));
             }
         });
+        for (let index = 0; index < this.numIndicators; index++) {
+            let li = document.createElement('li');
+            list.appendChild(li);
+            console.log(list);
+            
+        }
         this.addCustomEventListener();
 
     }
@@ -86,10 +110,22 @@ class ImageCarouselContainer extends HTMLElement {
             this.dispatchEvent(nextImageEvent);
         })
         this.addEventListener('changeImage', (event) => {
-            console.log("change image called");
-            console.log(event);
+            // console.log("change image called");
+            // console.log(event);
+            switch(event.detail.action) {
+                case 'prev':
+                    this.images[this.activeIndex].removeAttribute('active');
+                    this.images[1].setAttribute('active', true);
+                    break;
+                case 'next': 
+                    this.images[this.activeIndex].removeAttribute('active');
+                    this.images[0].testMessage();
+                    break;
+            }
         })
     }
+
+    // handle index ...
 }
 
 customElements.define('image-carousel-container', ImageCarouselContainer);
