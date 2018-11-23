@@ -6,14 +6,11 @@
     <title>Web Components</title>
 </head>
 <body>
-    <spinny-image>
-        <p slot="default-test">test</p>
-        <img src="test.jpeg" alt="test for web component">
-        <img src="test.jpeg" alt="test for web component">
-        <img src="test.jpeg" alt="test for web component">
-        <img src="test.jpeg" alt="test for web component">
-    </spinny-image>
-    <script src="index.js"></script>
+    <image-carousel-container>
+        <carousel-image src="test.jpeg"></carousel-image>
+    </image-carousel-container>
+    <script src="ImageCarouselContainer.js"></script>
+    <script src="ImageCarouselImage.js"></script>
     <script>
         document.addEventListener('foo', (event) => {
             console.log("received foo");
