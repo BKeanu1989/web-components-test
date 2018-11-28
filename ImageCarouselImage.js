@@ -17,6 +17,11 @@ const handler = {
 }
 
 class ImageCarouselImage extends HTMLElement {
+    static get observedAttributes() {
+        return ['active'];
+    }
+    
+    
     constructor() {
         super();
         this.image;
@@ -55,6 +60,28 @@ class ImageCarouselImage extends HTMLElement {
         // this.sourceImage();
         this.sourceByActiveAttribute();
         this.addCustomEventListener();
+    }
+
+    // TODO: test me
+    // The attributeChangedCallback() callback is run whenever one of the element's attributes 
+    // is changed in some way. As you can see from its properties, it is possible to act on attributes
+    //  individually, looking at their name, and old and new attribute values. In this case however,
+    //   we are just running the updateStyle() function again to make sure that the square's style 
+    //   is updated as per the new values:
+    attributeChangedCallback(name, oldValue, newValue) {
+        console.log("attribtue changed");
+
+        console.log(name, oldValue, newValue);
+        if (name === 'active') {
+            let ACTIVE_CHANGED = new CustomEvent('activeChanged', {
+                detail: {
+                    newActiveImage: this.getAttribute('data-number')
+                },
+                bubbles: true
+            });
+    
+            this.dispatchEvent(ACTIVE_CHANGED);
+        }
     }
 
     init() {
