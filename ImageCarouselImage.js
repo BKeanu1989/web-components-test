@@ -31,6 +31,9 @@ class ImageCarouselImage extends HTMLElement {
 
         /**
          * i dont even think i need proxies but it's fun
+         * 
+         * 
+         * with observing active now, it shouldn't matter at all
          */
         this.proxy = new Proxy(this, handler)
     }
@@ -43,10 +46,16 @@ class ImageCarouselImage extends HTMLElement {
             <style>
                 :host {
                     display: inline-block;
+                    opacity: 0;
+                    position: absolute;
+                    left: 50%;
+                    top: 0;
+                    transform: translate(-50%);
                 }
 
                 :host([active="true"]) {
                     border: 1px solid green;
+                    opacity: 1;
                 }
 
             </style>
