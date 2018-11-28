@@ -159,19 +159,19 @@ class ImageCarouselContainer extends HTMLElement {
             let nextIndex;
             switch(event.detail.action) {
                 case 'prev':
-                    console.log("prev clicked");
+                    // console.log("prev clicked");
                     this.images[this.activeIndex].removeAttribute('active');
                     nextIndex = indexEvaluator(this.images, this.activeIndex, -1);
-                    console.log("next index:", nextIndex);
+                    // console.log("next index:", nextIndex);
                     this.setActiveIndicator(nextIndex);
                     this.setActiveImageNSource(nextIndex)
                     break;
                 case 'next': 
-                console.log("next clicked");
+                    // console.log("next clicked");
                     this.images[this.activeIndex].removeAttribute('active');
                     nextIndex = indexEvaluator(this.images, this.activeIndex, 1);
-                    this.images[0].testMessage();
-                    console.log("next index:", nextIndex);
+                    // this.images[0].testMessage();
+                    // console.log("next index:", nextIndex);
                     this.setActiveIndicator(nextIndex);
                     this.setActiveImageNSource(nextIndex)
                     break;
@@ -183,7 +183,7 @@ class ImageCarouselContainer extends HTMLElement {
 
     eventListenerActiveChanged() {
         this.addEventListener('activeChanged', (event) => {
-            console.log("active changed", event);
+            // console.log("active changed", event);
             let nextActiveIndex = event.detail.newActiveImage - 1;
             this.setActiveIndicator(nextActiveIndex);
             this.activeIndex = nextActiveIndex;
