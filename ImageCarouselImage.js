@@ -53,6 +53,7 @@ class ImageCarouselImage extends HTMLElement {
         this.populateDataSrc();
         
         // this.sourceImage();
+        this.sourceByActiveAttribute();
         this.addCustomEventListener();
     }
 
@@ -78,11 +79,17 @@ class ImageCarouselImage extends HTMLElement {
         this.proxy.image.src = this.imageSrc;
     }
 
+    sourceByActiveAttribute() {
+        if (this.proxy.active) {
+            this.sourceImage();
+        }
+    }
+
     testMessage() {
         // this is working in the browser
         // let image = document.querySelector('carousel-image');
         // image.testMessage();
-        console.log("test message via custom component");
+        console.log("test message via custom component from image");
     }
 
     addCustomEventListener() {
