@@ -45,6 +45,15 @@ class ImageCarouselContainer extends HTMLElement {
                     margin-left: 5px;
                 }
 
+                li.active {
+                    border: 1px solid green;
+                    background-color: yellow;
+                }
+
+                li[active="true"] {
+                    background-color: red;
+                }
+
             </style>
             <slot name="left-handler"><span class="left-chev">left-chevron</span></slot>
             <slot name="right-handler"> <span class="right-chev">right chevron</span></slot>
@@ -59,21 +68,30 @@ class ImageCarouselContainer extends HTMLElement {
      */
     connectedCallback() {
         // const nodes = slot.assignedNodes();
+        this.activeIndex = 0;
         this.shadowRoot.appendChild(this.template.content.cloneNode(true));
         const slots = Array.from(this.shadowRoot.querySelectorAll('slot'));
         const list = this.shadowRoot.querySelector('ul');
         slots.forEach((slot) => {
             // default slot ergo should be used for slide images
+
+            // sourcing of images
+            // if is default === slot with no name in this case slide images
             if (!slot.name) {
                 let images =  Array.from(slot.assignedNodes().filter((x) => x.nodeName === 'CAROUSEL-IMAGE'));
-                let activeImageGiven = images.some((x) => x.hasAttribute('active'));
+                // let activeImageGiven = images.some((x) => x.hasAttribute('active'));
+                let activeImageGiven = images.findIndex((x) => x.hasAttribute('active'));
                 this.numIndicators = images.length;
                 this.images = images.map((image, index) => {
 
                     if (index === 0 && !activeImageGiven) {
                         image.setAttribute('active', true);
                         this.activeIndex = 0;
-                    } 
+                    } else {
+                        // active is given
+                        
+                    }
+
 
                     image.dataset.number = index + 1;
                     image.dataset.src = image.src;
@@ -82,10 +100,21 @@ class ImageCarouselContainer extends HTMLElement {
                 });
             }
         });
+
+        // refactor into settup
+        // this.activeIndex = 0;
+        this.list = [];
         for (let index = 0; index < this.numIndicators; index++) {
             let li = document.createElement('li');
             list.appendChild(li);
+            this.list.push(li);
+            
+            if (index === this.activeIndex) {
+                this.list[index].setAttribute('active', true);
+            }
+
         }
+        this.launch(this.activeIndex);
         this.addCustomEventListener();
 
     }
@@ -114,27 +143,101 @@ class ImageCarouselContainer extends HTMLElement {
         this.addEventListener('changeImage', (event) => {
             // console.log("change image called");
             // console.log(event);
+            let nextIndex;
             switch(event.detail.action) {
                 case 'prev':
                     console.log("prev clicked");
                     this.images[this.activeIndex].removeAttribute('active');
-                    this.images[1].setAttribute('active', true);
-                    // this.images.proxy[1].setAttribute('active', true);
-                    this.images[1].sourceImage();
+                    nextIndex = indexEvaluator(this.images, this.activeIndex, -1);
+                    console.log("next index:", nextIndex);
+                    this.setActiveIndicator(nextIndex);
+                    this.setActiveImageNSource(nextIndex)
                     break;
                 case 'next': 
-                    this.images[this.activeIndex].removeAttribute('active');
+                    console.log("next clicked");
+                    nextIndex = indexEvaluator(this.images, this.activeIndex, 1);
                     this.images[0].testMessage();
+                    console.log("next index:", nextIndex);
+                    this.setActiveIndicator(nextIndex);
+                    this.setActiveImageNSource(nextIndex)
                     break;
             }
         })
     }
 
-    // handle index ...
+    getByIndex() {
+
+    }
+
+    getNext() {
+
+    }
+
+    removeActive() {
+        
+    }
+
+    launch(nextIndex) {
+        this.setActiveIndicator(nextIndex);
+        // this.setActiveImageNSource(nextIndex);
+    }
+
+    setActiveIndicator(nextIndex) {
+        this.list[this.activeIndex].removeAttribute('active');
+        this.list[nextIndex].setAttribute('active', true);
+        this.activeIndex = nextIndex;
+    }
+
+    setActiveImageNSource(nextIndex) {
+        // remove old active
+        this.images[this.activeIndex].removeAttribute('active');
+        // set new active
+        // proxy?
+        // this.images.proxy[nextIndex].setAttribute('active', true);
+        this.images[nextIndex].setAttribute('active', true);
+        this.images[nextIndex].sourceImage();
+        this.activeIndex = nextIndex;
+    }
+
 }
+function indexEvaluator(array, curIndex, nextIndex) {
+    let nextValue;
+	let max = array.length - 1;
+    let min = 0;
+
+    if (curIndex !== max && curIndex !== min) {
+        nextValue = curIndex + nextIndex;
+        return nextValue;
+    }
+
+    if (curIndex === min) {
+        switch(nextIndex) {
+            case 1:
+                nextValue = curIndex + nextIndex;
+                break;
+            }
+        if (nextIndex == -1) {
+            nextValue = max;
+        }
+        return nextValue;
+    }
+
+    if (curIndex === max) {
+        switch(nextIndex) {
+            case -1:
+                nextValue = curIndex + nextIndex;
+                break;
+        }
+
+        if (nextIndex == 1) {
+            nextValue = min;
+        }
+        return nextValue;
+    }
+}
+
 // console.log(IndexHelper);
 // Object.assign(ImageCarouselContainer.prototype, IndexHelper);
-console.log(ImageCarouselContainer);
 customElements.define('image-carousel-container', ImageCarouselContainer);
 
 // TODO:
