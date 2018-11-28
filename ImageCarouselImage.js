@@ -55,8 +55,8 @@ class ImageCarouselImage extends HTMLElement {
                 }
 
                 :host([active="true"]) {
-                    border: 1px solid green;
-                    opacity: 1;
+                    // border: 1px solid green;
+                    // opacity: 1;
                 }
                 
             </style>
@@ -81,16 +81,21 @@ class ImageCarouselImage extends HTMLElement {
     //   is updated as per the new values:
     attributeChangedCallback(name, oldValue, newValue) {
         console.log("attribtue changed");
-
-        console.log(name, oldValue, newValue);
+        console.table({oldValue, newValue});
         if (name === 'active') {
-            let ACTIVE_CHANGED = new CustomEvent('activeChanged', {
-                detail: {
-                    newActiveImage: this.getAttribute('data-number')
-                },
-                bubbles: true
-            });
-            this.dispatchEvent(ACTIVE_CHANGED);
+            if (oldValue == "true") {
+                this.animateFadeAway();
+            }
+            if (newValue == "true") {
+                // or just animate directly here
+                let ACTIVE_CHANGED = new CustomEvent('activeChanged', {
+                    detail: {
+                        newActiveImage: this.getAttribute('data-number'),
+                    },
+                    bubbles: true
+                });
+                this.dispatchEvent(ACTIVE_CHANGED);
+            }
         }
     }
 
@@ -138,7 +143,23 @@ class ImageCarouselImage extends HTMLElement {
         const options = {
             duration: 2000,
             // direction: 'forwards',
-            fillMode: 'forwards',
+            fill: 'forwards',
+            easing: 'ease-in-out'
+        }
+        this.animate(keyframes, 
+            options
+        )
+    }
+
+    animateFadeAway() {
+        const keyframes = [
+            {opacity: 1},
+            {opacity: 0},
+        ];
+        const options = {
+            duration: 1800,
+            // direction: 'forwards',
+            fill: 'forwards',
             easing: 'ease-in-out'
         }
         this.animate(keyframes, 
@@ -148,7 +169,6 @@ class ImageCarouselImage extends HTMLElement {
 
     addCustomEventListener() {
         document.addEventListener('activeChanged', (event) => {
-            console.log("event", event);
             let active = this.getAttribute('active');
             if (active) this.animateActiveNChange();
             // console.log("active:" , active);
