@@ -106,7 +106,7 @@ class ImageCarouselContainer extends HTMLElement {
 
 
                     image.dataset.number = index + 1;
-                    image.dataset.src = image.src;
+                    // image.dataset.src = image.src;
                     image.src = '';
                     return image;
                 });
