@@ -37,6 +37,7 @@ class ImageCarouselContainer extends HTMLElement {
                     left: 50%;
                     bottom: 5%;
                     transform: translate(-50%);
+                    z-index: 1000;
                 }
 
                 .indicators li {
@@ -166,7 +167,8 @@ class ImageCarouselContainer extends HTMLElement {
                     this.setActiveImageNSource(nextIndex)
                     break;
                 case 'next': 
-                    console.log("next clicked");
+                console.log("next clicked");
+                    this.images[this.activeIndex].removeAttribute('active');
                     nextIndex = indexEvaluator(this.images, this.activeIndex, 1);
                     this.images[0].testMessage();
                     console.log("next index:", nextIndex);
@@ -201,7 +203,7 @@ class ImageCarouselContainer extends HTMLElement {
     }
 
     launch(nextIndex) {
-        // this.setActiveIndicator(nextIndex);
+        this.setActiveIndicator(nextIndex);
         // this.setActiveImageNSource(nextIndex);
     }
 
@@ -221,6 +223,7 @@ class ImageCarouselContainer extends HTMLElement {
         // this.images.proxy[nextIndex].setAttribute('active', true);
         this.images[nextIndex].setAttribute('active', true);
         this.images[nextIndex].sourceImage();
+        
         this.activeIndex = nextIndex;
     }
 

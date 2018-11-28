@@ -51,13 +51,14 @@ class ImageCarouselImage extends HTMLElement {
                     left: 50%;
                     top: 0;
                     transform: translate(-50%);
+                    z-index: -1000;
                 }
 
                 :host([active="true"]) {
                     border: 1px solid green;
                     opacity: 1;
                 }
-
+                
             </style>
             <img src="" data-src="" class="img">
         `;
@@ -69,6 +70,7 @@ class ImageCarouselImage extends HTMLElement {
         // this.sourceImage();
         this.sourceByActiveAttribute();
         this.addCustomEventListener();
+        this.animateActiveNChange();
     }
 
     // TODO: test me
@@ -126,6 +128,23 @@ class ImageCarouselImage extends HTMLElement {
         // let image = document.querySelector('carousel-image');
         // image.testMessage();
         console.log("test message via custom component from image");
+    }
+
+    animateActiveNChange() {
+        const keyframes = [
+            {opacity: 0},
+            {opacity: 1}
+        ];
+        const options = {
+            duration: 2000,
+            direction: 'forwards',
+            easing: 'ease-in-out'
+        }
+        this.animate(keyframes, 
+            // Object.assign()
+            options
+
+        )
     }
 
     addCustomEventListener() {
