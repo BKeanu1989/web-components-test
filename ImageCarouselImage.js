@@ -80,8 +80,8 @@ class ImageCarouselImage extends HTMLElement {
     //   we are just running the updateStyle() function again to make sure that the square's style 
     //   is updated as per the new values:
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log("attribtue changed");
-        console.table({oldValue, newValue});
+        // console.log("attribtue changed");
+        // console.table({oldValue, newValue});
         if (name === 'active') {
             if (oldValue == "true") {
                 this.animateFadeAway();
