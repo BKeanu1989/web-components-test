@@ -90,7 +90,6 @@ class ImageCarouselImage extends HTMLElement {
                 },
                 bubbles: true
             });
-    
             this.dispatchEvent(ACTIVE_CHANGED);
         }
     }
@@ -131,30 +130,29 @@ class ImageCarouselImage extends HTMLElement {
     }
 
     animateActiveNChange() {
+        // console.log("animate!!");
         const keyframes = [
             {opacity: 0},
             {opacity: 1}
         ];
         const options = {
             duration: 2000,
-            direction: 'forwards',
+            // direction: 'forwards',
+            fillMode: 'forwards',
             easing: 'ease-in-out'
         }
         this.animate(keyframes, 
-            // Object.assign()
             options
-
         )
     }
 
     addCustomEventListener() {
-        // not working
-        // this.addEventListener('change', () => {
-        //     console.log(this);
-        //     console.log("something changed");
-        // })
-        document.addEventListener('foo', () => {
-            console.log("i dont think this will work");
+        document.addEventListener('activeChanged', (event) => {
+            console.log("event", event);
+            let active = this.getAttribute('active');
+            if (active) this.animateActiveNChange();
+            // console.log("active:" , active);
+            // this.animateActiveNChange();
         })
     }
 }
