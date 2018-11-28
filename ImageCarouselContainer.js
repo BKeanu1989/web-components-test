@@ -1,6 +1,8 @@
 // to import/require stuff needs webpack (bundlers)
 
 class ImageCarouselContainer extends HTMLElement {
+
+    
     constructor() {
         super();
         this.attachShadow({
@@ -62,6 +64,16 @@ class ImageCarouselContainer extends HTMLElement {
         `;
     }
 
+    // ???
+    // TODO: test me
+    // The attributeChangedCallback() callback is run whenever one of the element's attributes 
+    // is changed in some way. As you can see from its properties, it is possible to act on attributes
+    //  individually, looking at their name, and old and new attribute values. In this case however,
+    //   we are just running the updateStyle() function again to make sure that the square's style 
+    //   is updated as per the new values:
+    attributeChangedCallback(name, oldValue, newValue) {
+
+    }
     /**
      * right now it's kinda unclear for me where to append the template ...
      * there are at least 2 ways to do it. just wondering which is better
@@ -163,6 +175,17 @@ class ImageCarouselContainer extends HTMLElement {
                     break;
             }
         })
+
+        this.eventListenerActiveChanged();
+    }
+
+    eventListenerActiveChanged() {
+        this.addEventListener('activeChanged', (event) => {
+            console.log("active changed", event);
+            let nextActiveIndex = event.detail.newActiveImage - 1;
+            this.setActiveIndicator(nextActiveIndex);
+            this.activeIndex = nextActiveIndex;
+        })  
     }
 
     getByIndex() {
@@ -178,12 +201,14 @@ class ImageCarouselContainer extends HTMLElement {
     }
 
     launch(nextIndex) {
-        this.setActiveIndicator(nextIndex);
+        // this.setActiveIndicator(nextIndex);
         // this.setActiveImageNSource(nextIndex);
     }
 
     setActiveIndicator(nextIndex) {
-        this.list[this.activeIndex].removeAttribute('active');
+        if (this.list[this.activeIndex].hasAttribute('active')) {
+            this.list[this.activeIndex].removeAttribute('active');
+        }
         this.list[nextIndex].setAttribute('active', true);
         this.activeIndex = nextIndex;
     }
